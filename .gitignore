@@ -1,2 +1,6 @@
-*.csv
 *.db
+*.csv
+!top_states_by_cost.csv
+!top_drugs_by_total_cost.csv
+!top_drugs_by_cost_per_claim.csv
+!suppression_rate_by_prescriber_type.csv

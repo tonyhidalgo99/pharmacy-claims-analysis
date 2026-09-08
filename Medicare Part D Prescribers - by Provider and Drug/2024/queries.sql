@@ -102,3 +102,14 @@ FROM claims
 GROUP BY Brnd_Name
 ORDER BY Total_drug_cost DESC
 LIMIT 50;
+
+--Determine suppression rate by Prscrbr_Type
+SELECT
+	Prscrbr_Type,
+	COUNT (*) AS total_rows,
+	SUM (CASE WHEN Tot_Benes IS NULL THEN 1 ELSE 0 END) AS null_count,
+	ROUND (SUM (CASE WHEN Tot_Benes IS NULL THEN 1 ELSE 0 END) * 100.0 / COUNT (*), 2) AS percentage 
+FROM claims
+GROUP BY Prscrbr_Type
+ORDER BY total_rows DESC
+LIMIT 20;
