@@ -14,3 +14,17 @@ Not necessarily — max of 625 claims on a suppressed row. Pulled it up: clozapi
 Checked the top 20 suppressed rows by claims and found common maintenance drugs (simvastatin, pravastatin, warfarin, gabapentin) with no monitoring requirement, also showing high claim counts. Days' supply per claim (Tot_Day_Suply / Tot_Clms) averaged ~5 days — pointed to long-term care short-cycle dispensing (nursing facilities dispensing in 7-day increments to cut waste).
 
 Takeaway: suppressed ≠ low-volume. Can't drop/zero-out NULL Tot_Benes rows in cost-per-claim analysis without losing over half the table — need a real plan for handling them.
+
+
+## 9-9-26 Cost Per Claim & Total Drug Cost Analysis
+Investigated Tot_Benes suppression further:  confirmed Tot_Clms and Tot_Drug_Cst remain populated even when Tot_Benes is NULL (suppressed); therefore no need to filter out suppressed records for cost-per-claim analysis.
+
+Verified there were no records where Tot_Benes is NULL and Tot_Clms < 10, consistent with CMS <11 suppression threshold.
+
+Confirmed no records had Tot_Clms = 0 in order to avoid any calculation issues.
+
+Ran cost-per-claim by drug (grouped and aggregated by providers), limited to top 50 results - top of list primarily ultra-high-cost orphan/rare disease drugs (Recovi, Cablivi, Carbaglu, etc).
+
+Ran total drug cost by drug, limited to top 50 results - shifted to high-volume chronic disease drugs (Eliquis, Ozempic, Jardiance, Mounjaro, Trulicity).
+
+Takeaway:  high per-claim cost and high total cost are a result of different forces - orphan/rare disease biologics top the cost-per-claim list due to price alone, while chronic disease drugs with massive patient populations dominate total Medicare spend despite far lower per-claim costs. Therefore most expensive drugs and biggest cost driver are two separate results.
